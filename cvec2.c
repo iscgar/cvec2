@@ -255,9 +255,12 @@ int _vec2_impl_shrink(struct _vec2_impl_struct *vec_ptr, size_t el_size)
     {
         _vec2_clear(vec_ptr, el_size);
     }
-    else
+    else if ((vec2_size(vec_ptr) < vec2_capacity(vec_ptr)) &&
+             (vec2_capacity(vec_ptr) > VEC2_INITIAL_CAPACITY))
     {
         unsigned char *new_mem = NULL;
+        size_t new_capacity = (vec2_size(vec_ptr) > VEC2_INITIAL_CAPACITY) ? 
+            vec2_size(vec_ptr) : VEC2_INITIAL_CAPACITY;
 
         /* Move the data to the beginning if we're at an offset due to removals.
          * This might cause double copy if realloc allocates a new buffer for us instead
@@ -272,7 +275,7 @@ int _vec2_impl_shrink(struct _vec2_impl_struct *vec_ptr, size_t el_size)
             vec2_start(vec_ptr) = 0;
         }
 
-        new_mem = (unsigned char *)realloc(vec2_data(vec_ptr), vec2_size(vec_ptr) * el_size);
+        new_mem = (unsigned char *)realloc(vec2_data(vec_ptr), new_capacity * el_size);
 
         if (new_mem == NULL)
         {
