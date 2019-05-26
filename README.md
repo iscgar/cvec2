@@ -62,7 +62,7 @@ the `VEC2_BODY` macro to define your type:
 struct int_vector VEC2_BODY(int);
 
 /* Or, if you prefer not to keep it in the struct namespace: */
-typedef int_vector_tag /* <- optional tag */ VEC2_BODY(int) int_vector;
+typedef struct int_vector_tag /* <- optional tag */ VEC2_BODY(int) int_vector;
 
 /* I prefer the explicit struct namespacing, so all of the examples will use the first form */
 ```
