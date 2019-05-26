@@ -359,7 +359,7 @@ int _vec2_impl_assign(struct _vec2_impl_struct *vec_ptr, size_t idx, const void 
         return FALSE;
     }
 
-    memcpy(VEC2_GET(vec_ptr, el_size, idx), val, len * el_size);
+    memmove(VEC2_GET(vec_ptr, el_size, idx), val, len * el_size);
     return TRUE;
 }
 
