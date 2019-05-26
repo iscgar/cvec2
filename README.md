@@ -296,6 +296,11 @@ if (vec2_reserve(&v, 25))
 }
 ```
 
+#### `int vec2_shrink_to_fit(vec_ptr)`
+Shrinks the vector such that its capacity equals its size. You need to explicitly call this function if you want to reclain
+free memory after mutating the vector since the vector will not free memory on its own after removal of items. Returns `TRUE`
+if the shrinking succeeded. `FALSE` otherwise.
+
 #### `int vec2_push(vec_ptr, T v)`
 Inserts a value `v` to the end of the vector. Return `TRUE` if `vec_ptr` points to a valid vector structure and insertion
 succeeded. `FALSE` otherwise.
