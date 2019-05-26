@@ -228,7 +228,7 @@ All vector functions are called through the macros defined int `cvec2.h`. See [C
 to watch out for.
 
 #### `VEC2_BODY(T)`
-A macro that defines the structure body for vector of type `T`.
+A macro that defines the body of the struct for a vector of type `T`.
 ```c
 struct filep_vec VEC2_BODY(FILE*);
 ```
