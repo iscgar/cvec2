@@ -141,7 +141,7 @@ printf("The first element is %d, The last is %d, and the one at index 1 is %d\n"
 
 If you're wondering why the code above dereferences the result of the call to the accessor functions, that's
 because these function do bound-checking to enure that out of bounds access doesn't occur (remember that safety
-and correctness is the first goal of this library?). In case of failure they return `NULL`, which is why you
+and correctness are first priority for this library?). In case of failure they return `NULL`, which is why you
 should probably check the return value before dereferencing it.
 
 If you don't want to incur the cost of bound checks on every item subscript (e.g. due of performace concerns),
@@ -298,7 +298,7 @@ if (vec2_reserve(&v, 25))
 
 #### `int vec2_shrink_to_fit(vec_ptr)`
 Shrinks the vector such that its capacity equals its size. You need to explicitly call this function if you want to reclain
-free memory after mutating the vector since the vector will not free memory on its own after removal of items. Returns `TRUE`
+free memory after mutating the vector because the vector will not free memory on its own after removal of items. Returns `TRUE`
 if the shrinking succeeded. `FALSE` otherwise.
 
 #### `int vec2_push(vec_ptr, T v)`
@@ -307,11 +307,13 @@ succeeded. `FALSE` otherwise.
 
 #### `int vec2_push_ptr(vec_ptr, T *v_ptr)`
 Inserts a value pointed to by the pointer `v_ptr` to the end of the vector. Return `TRUE` if `vec_ptr` points to a valid
-vector structure, `v_ptr` is not NULL, and insertion succeeded. `FALSE` otherwise.
+vector structure, `v_ptr` is not NULL, and insertion succeeded. `FALSE` otherwise. Note that `v_ptr` must not point
+to an item in the vector.
 
 #### `int vec2_push_multi(vec_ptr, T *arr, size_t len)`
 Inserts `len` elements from the array `arr` to the end of the vector. Return `TRUE` if `vec_ptr` points to a valid
-vector structure, `arr` is not NULL, and insertion succeeded. `FALSE` otherwise.
+vector structure, `arr` is not NULL, and insertion succeeded. `FALSE` otherwise. Note that `arr` must not point
+to an item or items in the vector.
 
 #### `int vec2_unshift(vec_ptr, T v)`
 Inserts a value `v` to the beginning of the vector. Return `TRUE` if `vec_ptr` points to a valid vector structure, and
@@ -319,11 +321,13 @@ insertion succeeded. `FALSE` otherwise.
 
 #### `int vec2_unshift_ptr(vec_ptr, T *v_ptr)`
 Inserts a value pointed to by the pointer `v_ptr` to the beginning of the vector. Return `TRUE` if `vec_ptr` points to
-a valid vector structure, `v_ptr` is not NULL, and insertion succeeded. `FALSE` otherwise.
+a valid vector structure, `v_ptr` is not NULL, and insertion succeeded. `FALSE` otherwise. Note that `v_ptr` must not
+point to an item in the vector.
 
 #### `int vec2_unshift_multi(vec_ptr, T *arr, size_t len)`
 Inserts `len` elements from the array `arr` to the beginning of the vector. Return `TRUE` if `vec_ptr` points to a valid
-vector structure, `arr` is not NULL, and insertion succeeded. `FALSE` otherwise.
+vector structure, `arr` is not NULL, and insertion succeeded. `FALSE` otherwise. Note that `v_ptr` must not point to
+an item or items in the vector.
 
 #### `int vec2_insert(vec_ptr, size_t idx, T v)`
 Inserts a value `v` at the specified `idx` in the vector. Returns `TRUE` if `vec_ptr` points to a valid vector structure,
@@ -332,12 +336,12 @@ Inserts a value `v` at the specified `idx` in the vector. Returns `TRUE` if `vec
 #### `int vec2_insert_ptr(vec_ptr, size_t idx, T *v_ptr)`
 Inserts a value passed by the reference `v_ptr` at the specified `idx` in the vector. Returns `TRUE` if `vec_ptr` points
 to a valid vector structure, `v_ptr` is not NULL, `idx` is not greater than the vector's size, and insertion suceeded.
-`FALSE` otherwise.
+`FALSE` otherwise.  Note that `v_ptr` must not point to an item in the vector.
 
 #### `int vec2_insert_multi(vec_ptr, size_t idx, T *arr, size_t len)`
 Inserts `len` elements from the array `arr` at the specified `idx` in the vector. Returns `TRUE` if `vec_ptr` points
 to a valid vector structure, `arr` is not NULL, the range [`idx`, `idx+len`) is not outside than the vector's bounds,
-and insertion suceeded. `FALSE` otherwise.
+and insertion suceeded. `FALSE` otherwise. Note that `v_ptr` must not point to an item or items in the vector.
 
 #### `int vec2_swap(vec_ptr, size_t first, size_t second)`
 Performs a swap on the elements at indices `first` and `second` in `v_ptr`. Returns `TRUE` if `vec_ptr` points
@@ -361,21 +365,24 @@ Assigns `len` items from `v_ptr` starting at `idx`. Returns `TRUE` if `vec_ptr` 
 
 #### `int vec2_pop(vec_ptr, T *o_ptr)`
 Removes an element from the end of the vector and stores it in `o_ptr` if it's not NULL. Returns `TRUE` if `vec_ptr` points to a
-valid vector structure that is not empty. `FALSE` otherwise.
+valid vector structure that is not empty. `FALSE` otherwise. Note that `o_ptr` must not point to an item in the vector.
 
 #### `int vec2_pop_multi(vec_ptr, size_t len, T *o_ptr)`
 Removes `len` elements from the end of the vector and stores them in `o_ptr` if it's not NULL. Returns `TRUE` if `vec_ptr` points
-to a valid vector structure that holds at least `len` elements. `FALSE` otherwise.
+to a valid vector structure that holds at least `len` elements. `FALSE` otherwise. Note that `o_ptr` must not point to
+an item or items in the vector.
 
 #### `int vec2_shift(vec_ptr, T *o_ptr)`
 Removes an element from the beginning of the vector and stores it in `o_ptr` if it's not NULL. Returns `TRUE` if `vec_ptr` points
-to a valid vector structure that is not empty. `FALSE` otherwise.
+to a valid vector structure that is not empty. `FALSE` otherwise. Note that `o_ptr` must not point to an item in the vector.
 
 #### `int vec2_shift_multi(vec_ptr, size_t len, T *o_ptr)`
 Removes `len` elements from the beginning of the vector and stores them in `o_ptr` if it's not NULL. Returns `TRUE` if `vec_ptr`
-points to a valid vector structure that holds at least `len` elements. `FALSE` otherwise.
+points to a valid vector structure that holds at least `len` elements. `FALSE` otherwise. Note that `v_ptr` must not
+point to an item or items in the vector.
 
 #### `int vec2_remove(vec_ptr, size_t idx, size_t len, T *o_ptr)`
 Removes `len` items starting at `idx` from the vector and stores them in `o_ptr` if it's not NULL. Returns `TRUE` if `vec_ptr` points
 to a valid vector structure that is not empty and the range [`idx`, `idx+len`) is inside the vector's bounds. `FALSE` otherwise.
+Note that `o_ptr` must not point to an item or items in the vector.
 
